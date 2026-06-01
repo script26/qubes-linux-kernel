@@ -46,18 +46,14 @@ $linux_merge_config -m "$base_config" "$local_config.gen"
 
 make $make_opts KCONFIG_ALLCONFIG=.config alldefconfig
 
-#rc=0
 for cfg in $(sed -n "$sed_config_exp" "$local_config.gen"); do
     requested="$(grep -w "$cfg" "$local_config.gen" || true)"
     actual="$(grep -w "$cfg" .config || true)"
     if [ "$requested" != "$actual" ]; then
-#        printf 'Local config setting for %s didn'\''t make it into the final config\n' "$cfg"
-#        rc=1
-        printf ‘WARNING: Local config setting for %s didn’t make it into the final config (ignored)’ “$cfg”
-fi
+        printf 'WARNING: Local config setting for %s didn'\''t make it into the final config (ignored)\n' "$cfg"
+    fi
 done
 
 rm "$local_config.gen"
 
-#exit $rc
 exit 0
